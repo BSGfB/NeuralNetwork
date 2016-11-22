@@ -14,10 +14,14 @@
 #ifndef MULTILAYERNEURALNETWORKTEACHER_HPP
 #define MULTILAYERNEURALNETWORKTEACHER_HPP
 
-#include <vector>
 #include "AbstractNeuralNetworkTeacher.hpp"
 #include "../Layer/AbstractBackPropagationErrorLayer.hpp"
 #include "../NNFunction/ErrorFunction.hpp"
+
+#include "../Other/MyLog.h"
+
+#include <vector>
+#include <string>
 
 using std::vector;
 

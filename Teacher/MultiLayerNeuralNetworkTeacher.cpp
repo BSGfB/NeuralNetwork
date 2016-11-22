@@ -1,18 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/* 
- * File:   MultiLayerNeuralNetworkTeacher.cpp
- * Author: sergey
- * 
- * Created on November 19, 2016, 7:11 PM
- */
-
-#include <stdio.h>
-
 #include "MultiLayerNeuralNetworkTeacher.hpp"
 
 namespace NeuralNetwork {
@@ -39,19 +24,19 @@ namespace NeuralNetwork {
                     vector<float> currentErrors = NNFunction::ErrorFunction::getError(currentData, outputDataSet[t]);
                     for(int i = layers.size() - 1; i >= 0; i--) {
                         currentErrors = layers[i]->computeBackwardError(currentErrors);
-					}
+                    }
                     
                     for (unsigned int i = 0; i < layers.size(); i++)
                         layers[i]->adjust();
 
                     totalError += NNFunction::ErrorFunction::getSquareError(currentData, outputDataSet[t]);  
                 }
-                                
+                
+                totalError *= 0.5f;
+                
+                MyLog::addLog(LOG_TYPE::INFO, std::to_string(iteration) + " Error: " + std::to_string(totalError));
+                
                 if(iteration % checkStep == 0) {
-                    totalError *= 0.5f;
-
-					printf("%f\n", totalError);
-
                     if(totalError <= targetError) {
                         return;
                     }
