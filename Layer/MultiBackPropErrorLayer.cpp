@@ -1,16 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/* 
- * File:   MultiBackPropErrorLayer.cpp
- * Author: sergey
- * 
- * Created on November 19, 2016, 9:10 AM
- */
-
 #include <stdio.h>
 
 #include "MultiBackPropErrorLayer.hpp"
@@ -26,7 +13,42 @@ namespace NeuralNetwork {
 
         MultiBackPropErrorLayer::~MultiBackPropErrorLayer() {
         }
+        
+        ActivationFunction::AbstractActivationFunction* MultiBackPropErrorLayer::getActivationFunction() const {
+            return activationFunction;
+        }
 
+        float MultiBackPropErrorLayer::getSpeedLearning() const {
+            return speedLearning;
+        }
+
+        vector<float> MultiBackPropErrorLayer::getThresholdVector() const {
+            return thresholdVector;
+        }
+
+        vector<vector<float> > MultiBackPropErrorLayer::getWeightMatrix() const {
+            return weightMatrix;
+        }
+
+        void MultiBackPropErrorLayer::setActivationFunction(ActivationFunction::AbstractActivationFunction* activationFunction) {
+            this->activationFunction = activationFunction;
+        }
+
+        void MultiBackPropErrorLayer::setSpeedLearning(float speedLearning) {
+            this->speedLearning = speedLearning;
+        }
+
+        void MultiBackPropErrorLayer::setWeightMatrix(int inputSize, int outputSize) {
+            this->weightMatrix.resize(outputSize, vector<float>(inputSize, 0.0001f));
+            this->thresholdVector.resize(outputSize, 0.f);
+
+            this->input.resize(inputSize, 0.f);
+            this->output.resize(outputSize, 0.f);
+            this->errorVector.resize(outputSize, 0.f);
+        }
+        
+        
+        
         void MultiBackPropErrorLayer::adjust() {
             for(int i = 0; i < weightMatrix.size(); i++) {
                 float temp = speedLearning * activationFunction->getDerivativeValue(output[i]) * errorVector[i];

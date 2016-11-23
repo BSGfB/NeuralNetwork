@@ -1,16 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/* 
- * File:   MultiBackPropErrorLayer.hpp
- * Author: sergey
- *
- * Created on November 19, 2016, 9:10 AM
- */
-
 #ifndef MULTIBACKPROPERRORLAYER_HPP
 #define MULTIBACKPROPERRORLAYER_HPP
 
@@ -52,38 +39,19 @@ namespace NeuralNetwork {
             vector<float> errorVector;
             
         public:
-            ActivationFunction::AbstractActivationFunction* getActivationFunction() const {
-                return activationFunction;
-            }
+            ActivationFunction::AbstractActivationFunction* getActivationFunction() const;
 
-            float getSpeedLearning() const {
-                return speedLearning;
-            }
+            float getSpeedLearning() const;
 
-            vector<float> getThresholdVector() const {
-                return thresholdVector;
-            }
+            vector<float> getThresholdVector() const;
 
-            void setActivationFunction(ActivationFunction::AbstractActivationFunction* activationFunction) {
-                this->activationFunction = activationFunction;
-            }
+            void setActivationFunction(ActivationFunction::AbstractActivationFunction* activationFunction);
 
-            void setSpeedLearning(float speedLearning) {
-                this->speedLearning = speedLearning;
-            }
+            void setSpeedLearning(float speedLearning);
 
-            vector<vector<float> > getWeightMatrix() const {
-                return weightMatrix;
-            }
+            vector<vector<float> > getWeightMatrix() const;
 
-            void setWeightMatrix(int inputSize, int outputSize) {
-                this->weightMatrix.resize(outputSize, vector<float>(inputSize, 0.0001f));
-                this->thresholdVector.resize(outputSize, 0.f);
-                
-                this->input.resize(inputSize, 0.f);
-                this->output.resize(outputSize, 0.f);
-                this->errorVector.resize(outputSize, 0.f);
-            }
+            void setWeightMatrix(int inputSize, int outputSize);
         };
     }
 }
