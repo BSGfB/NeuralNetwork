@@ -14,19 +14,19 @@ namespace NeuralNetwork {
         MultiBackPropErrorLayer::~MultiBackPropErrorLayer() {
         }
         
-        ActivationFunction::AbstractActivationFunction* MultiBackPropErrorLayer::getActivationFunction() const {
+        ActivationFunction::AbstractActivationFunction* MultiBackPropErrorLayer::getActivationFunction() {
             return activationFunction;
         }
 
-        float MultiBackPropErrorLayer::getSpeedLearning() const {
+        float MultiBackPropErrorLayer::getSpeedLearning() {
             return speedLearning;
         }
 
-        vector<float> MultiBackPropErrorLayer::getThresholdVector() const {
+        vector<float> MultiBackPropErrorLayer::getThresholdVector() {
             return thresholdVector;
         }
 
-        vector<vector<float> > MultiBackPropErrorLayer::getWeightMatrix() const {
+        vector<vector<float> > MultiBackPropErrorLayer::getWeightMatrix() {
             return weightMatrix;
         }
 
@@ -65,8 +65,10 @@ namespace NeuralNetwork {
             vector<float> nextErrorVector(weightMatrix[0].size(), 0.0f);
             
             for(int i = 0; i < weightMatrix.size(); i++) {
+                float temp = error[i] * activationFunction->getDerivativeValue(output[i]);
+                
                 for(int j = 0; j < weightMatrix[i].size(); j++) {
-                    nextErrorVector[j] += error[i] * weightMatrix[i][j] * activationFunction->getDerivativeValue(output[i]);
+                    nextErrorVector[j] += temp * weightMatrix[i][j];
                 }
             }
             return nextErrorVector;

@@ -14,10 +14,7 @@
 #ifndef MULTILAYERNEURALNETWORKTEACHER_HPP
 #define MULTILAYERNEURALNETWORKTEACHER_HPP
 
-#include "AbstractNeuralNetworkTeacher.hpp"
-#include "../Layer/AbstractBackPropagationErrorLayer.hpp"
-#include "../NNFunction/ErrorFunction.hpp"
-
+#include "../NeuralNetwork.h"
 #include "../Other/MyLog.h"
 
 #include <vector>

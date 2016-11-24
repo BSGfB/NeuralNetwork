@@ -9,4 +9,6 @@
 
 #include "Teacher/NeuralNetworkTeacher.h"
 
+#include "Executor/NeuralNetworkExecutor.h"
+
 #endif

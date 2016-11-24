@@ -1,8 +1,7 @@
 #ifndef MULTIBACKPROPERRORLAYER_HPP
 #define MULTIBACKPROPERRORLAYER_HPP
 
-#include "AbstractBackPropagationErrorLayer.hpp"
-#include "../ActivationFunction/AbstractActivationFunction.hpp"
+#include "../NeuralNetwork.h"
 
 #include <vector>
 #include <time.h>
@@ -12,7 +11,7 @@
 using std::vector;
 
 namespace NeuralNetwork {
-    namespace Layer {   
+    namespace Layer {
         
         class MultiBackPropErrorLayer : public AbstractBackPropagationErrorLayer {
         public:
@@ -39,19 +38,14 @@ namespace NeuralNetwork {
             vector<float> errorVector;
             
         public:
-            ActivationFunction::AbstractActivationFunction* getActivationFunction() const;
+            float getSpeedLearning() override;
+            vector<float> getThresholdVector() override;
+            vector<vector<float> > getWeightMatrix() override;
+            ActivationFunction::AbstractActivationFunction* getActivationFunction() override;
 
-            float getSpeedLearning() const;
-
-            vector<float> getThresholdVector() const;
-
-            void setActivationFunction(ActivationFunction::AbstractActivationFunction* activationFunction);
-
-            void setSpeedLearning(float speedLearning);
-
-            vector<vector<float> > getWeightMatrix() const;
-
-            void setWeightMatrix(int inputSize, int outputSize);
+            void setWeightMatrix(int inputSize, int outputSize) override;
+            void setActivationFunction(ActivationFunction::AbstractActivationFunction* activationFunction) override;
+            void setSpeedLearning(float speedLearning) override;
         };
     }
 }

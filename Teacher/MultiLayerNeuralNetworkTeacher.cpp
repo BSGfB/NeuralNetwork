@@ -13,8 +13,6 @@ namespace NeuralNetwork {
         }
         
         void MultiLayerNeuralNetworkTeacher::run() {
-            float totalError = 0.0f;
-            
             for(unsigned long iteration = 0; iteration < numberOfIterations; iteration++) {
                 for(unsigned int t = 0; t < inputDataSet.size(); t++) {
                     vector<float> currentData = inputDataSet[t];
@@ -28,22 +26,35 @@ namespace NeuralNetwork {
                     
                     for (unsigned int i = 0; i < layers.size(); i++)
                         layers[i]->adjust();
-
-                    totalError += NNFunction::ErrorFunction::getSquareError(currentData, outputDataSet[t]);  
                 }
-                
-                totalError *= 0.5f;
-                
-                MyLog::addLog(LOG_TYPE::INFO, std::to_string(iteration) + " Error: " + std::to_string(totalError));
-                
+                                
                 if(iteration % checkStep == 0) {
+                    float totalError = 0.0f;                           
+                    
+                    std::vector<Layer::ExecutLayer> exeLayers(layers.size());
+                    for(int i = 0; i < exeLayers.size(); i++) {
+                        exeLayers[i].setActivationFunction(layers[i]->getActivationFunction());
+                        exeLayers[i].setThresholdVector(layers[i]->getThresholdVector());
+                        exeLayers[i].setWeightMatrix(layers[i]->getWeightMatrix());
+                    }
+                    
+                    for(unsigned int t = 0; t < inputDataSet.size(); t++) {
+                        vector<float> currentData = inputDataSet[t];
+                        for(unsigned int i = 0; i < layers.size(); i++) 
+                            currentData = layers[i]->computeOutput(currentData);
+                        
+                        totalError += NNFunction::ErrorFunction::getSquareError(currentData, outputDataSet[t]);
+                    }
+                    
+                    totalError *= 0.5;
+                    
+                    printf("\nIt: %u\tError: %f\n", iteration, totalError);
+                    MyLog::addLog(LOG_TYPE::INFO, "It: " + std::to_string(iteration) + "\tError: " + std::to_string(totalError));
+
                     if(totalError <= targetError) {
                         return;
                     }
-                    
-                    totalError = 0.0f;
                 }
-
             }                   
         }
         
