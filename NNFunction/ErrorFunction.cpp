@@ -31,7 +31,7 @@ namespace NeuralNetwork {
         float ErrorFunction::getSquareError(const vector<float>& firstVector, const vector<float>& secondVector) {
             float squareError = 0.0f;
             for(unsigned int i = 0; i < firstVector.size(); i++) { squareError += (float)pow(firstVector[i] - secondVector[i], 2); }
-            return squareError;
+            return squareError / 2.0f;
         }
 
     }

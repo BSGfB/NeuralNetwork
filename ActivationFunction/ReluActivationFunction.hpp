@@ -5,44 +5,42 @@
  */
 
 /* 
- * File:   SigmoidActivationFunction.hpp
+ * File:   ReluActivationFunction.hpp
  * Author: sergey
  *
- * Created on November 18, 2016, 10:53 PM
+ * Created on November 29, 2016, 10:52 PM
  */
 
-#ifndef SIGMOIDACTIVATIONFUNCTION_HPP
-#define SIGMOIDACTIVATIONFUNCTION_HPP
+#ifndef RELUACTIVATIONFUNCTION_HPP
+#define RELUACTIVATIONFUNCTION_HPP
 
-#include "math.h"
 #include "AbstractActivationFunction.hpp"
 
 namespace NeuralNetwork {
     namespace ActivationFunction {   
-        class SigmoidActivationFunction : public AbstractActivationFunction {           
+        class ReluActivationFunction : public AbstractActivationFunction {           
         public:
-            SigmoidActivationFunction() {
+            ReluActivationFunction() {
             }
             
-            SigmoidActivationFunction(const SigmoidActivationFunction& other) {
+            ReluActivationFunction(const ReluActivationFunction& other) {
             }
             
             float getValue(float x) {              
-                return 1.0f / (1.0f + expf(-x));
+                return x > 0 ? x : 0.01f * x;
             }
             
             float getDerivativeValue(float x) {
-                float y = getValue(x);
-                return y * (1.0f - y);
+                return x > 0 ? 1.0f : 0.01f;
             }
             
             std::string getActivationFunctionName() override {
-                return "SigmoidActivationFunction";
+                return "ReluActivationFunction";
             }
         };  
         
     }
 }
 
-#endif /* SIGMOIDACTIVATIONFUNCTION_HPP */
+#endif /* RELUACTIVATIONFUNCTION_HPP */
 

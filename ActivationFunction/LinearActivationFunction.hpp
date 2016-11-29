@@ -16,7 +16,6 @@
 
 #include "AbstractActivationFunction.hpp"
 
-
 namespace NeuralNetwork {
     namespace ActivationFunction {       
         class LinearActivationFunction : public AbstractActivationFunction {
@@ -28,6 +27,9 @@ namespace NeuralNetwork {
                 return s;
             }
             
+            std::string getActivationFunctionName() override {
+                return "LinearActivationFunction";
+            }
         };
         
     }

@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "MultiLayerNeuralNetworkTeacher.hpp"
 
 namespace NeuralNetwork {
@@ -13,13 +15,19 @@ namespace NeuralNetwork {
         }
         
         void MultiLayerNeuralNetworkTeacher::run() {
-            for(unsigned long iteration = 0; iteration < numberOfIterations; iteration++) {
+            time_t seconds = time(NULL);
+            printf("[INFO] Start time: %s\n", asctime(localtime(&seconds)));
+ 
+            for(int iteration = 0; iteration < numberOfIterations; iteration++) {                
+                /* Back propagation algorithm */
                 for(unsigned int t = 0; t < inputDataSet.size(); t++) {
+                    
                     vector<float> currentData = inputDataSet[t];
                     for(unsigned int i = 0; i < layers.size(); i++) 
-                        currentData = layers[i]->computeOutput(currentData);
+                        currentData = layers[i]->computeOutput(currentData);                   
 
                     vector<float> currentErrors = NNFunction::ErrorFunction::getError(currentData, outputDataSet[t]);
+                                        
                     for(int i = layers.size() - 1; i >= 0; i--) {
                         currentErrors = layers[i]->computeBackwardError(currentErrors);
                     }
@@ -27,35 +35,40 @@ namespace NeuralNetwork {
                     for (unsigned int i = 0; i < layers.size(); i++)
                         layers[i]->adjust();
                 }
-                                
-                if(iteration % checkStep == 0) {
-                    float totalError = 0.0f;                           
+                               
+                /* Examination */
+                if(iteration % checkStep == 0 || iteration == numberOfIterations - 1) {
+                    float totalError = 0.0f;
                     
-                    std::vector<Layer::ExecutLayer> exeLayers(layers.size());
+                    std::vector<Layer::AbstractMLPExecutLayer*> exeLayers(layers.size());
                     for(int i = 0; i < exeLayers.size(); i++) {
-                        exeLayers[i].setActivationFunction(layers[i]->getActivationFunction());
-                        exeLayers[i].setThresholdVector(layers[i]->getThresholdVector());
-                        exeLayers[i].setWeightMatrix(layers[i]->getWeightMatrix());
+                        exeLayers[i] = new Layer::MLPExecutLayer();
+                        exeLayers[i]->setActivationFunction(layers[i]->getActivationFunction());
+                        exeLayers[i]->setThresholdVector(layers[i]->getThresholdVector());
+                        exeLayers[i]->setWeightMatrix(layers[i]->getWeightMatrix());
                     }
                     
-                    for(unsigned int t = 0; t < inputDataSet.size(); t++) {
-                        vector<float> currentData = inputDataSet[t];
-                        for(unsigned int i = 0; i < layers.size(); i++) 
-                            currentData = layers[i]->computeOutput(currentData);
-                        
-                        totalError += NNFunction::ErrorFunction::getSquareError(currentData, outputDataSet[t]);
+                    Executor::MultiLayerNeuralNetworkExecutor executor;
+                    executor.setLayers(exeLayers);
+                    
+                    for(int i = 0; i < inputDataSet.size(); i++) {
+                        std::vector<float> output = executor.computeOutput(inputDataSet[i]);
+                        totalError += NNFunction::ErrorFunction::getSquareError(output, outputDataSet[i]);
                     }
                     
-                    totalError *= 0.5;
+                    printf("[INFO] Iteration: %u, Error: %f\n", iteration, totalError);
                     
-                    printf("\nIt: %u\tError: %f\n", iteration, totalError);
-                    MyLog::addLog(LOG_TYPE::INFO, "It: " + std::to_string(iteration) + "\tError: " + std::to_string(totalError));
-
                     if(totalError <= targetError) {
                         return;
                     }
                 }
-            }                   
+                
+                seconds = time(NULL);
+                printf("[INFO] Iteration: %u, Time: %s\n", iteration, asctime(localtime(&seconds)));   
+            }    
+            
+            seconds = time(NULL);
+            printf("[INFO] Finish time: %s\n", asctime(localtime(&seconds)));
         }
         
         int MultiLayerNeuralNetworkTeacher::getCheckStep() const {

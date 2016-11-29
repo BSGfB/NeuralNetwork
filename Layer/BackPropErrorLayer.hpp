@@ -13,11 +13,11 @@ using std::vector;
 namespace NeuralNetwork {
     namespace Layer {
         
-        class MultiBackPropErrorLayer : public AbstractBackPropagationErrorLayer {
+        class BackPropErrorLayer : public AbstractBackPropagationErrorLayer {
         public:
-            MultiBackPropErrorLayer();
-            MultiBackPropErrorLayer(const MultiBackPropErrorLayer& orig);
-            virtual ~MultiBackPropErrorLayer();
+            BackPropErrorLayer();
+            BackPropErrorLayer(const BackPropErrorLayer& orig);
+            virtual ~BackPropErrorLayer();
             
             void adjust() override;
             std::vector<float> computeBackwardError(std::vector<float>) override;

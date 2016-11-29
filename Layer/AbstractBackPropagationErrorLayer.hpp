@@ -24,6 +24,7 @@ namespace NeuralNetwork {
              */
             virtual void adjust() = 0;
             
+            
             virtual float getSpeedLearning() = 0;            
             
             virtual std::vector<float> getThresholdVector() = 0;

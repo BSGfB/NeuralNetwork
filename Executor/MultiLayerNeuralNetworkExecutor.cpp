@@ -25,18 +25,18 @@ namespace NeuralNetwork {
         MultiLayerNeuralNetworkExecutor::~MultiLayerNeuralNetworkExecutor() {
         }
 
-        std::vector<float> MultiLayerNeuralNetworkExecutor::computeOutput(std::vector<float> input) {
+        std::vector<float> MultiLayerNeuralNetworkExecutor::computeOutput(std::vector<float> input) {            
             for(int i = 0; i < layers.size(); i++) {
                 input = layers[i]->computeOutput(input);
             }
             return input;
         }
 
-        vector<Layer::AbstractLayer*> MultiLayerNeuralNetworkExecutor::getLayers() const {
+        vector<Layer::AbstractMLPExecutLayer*> MultiLayerNeuralNetworkExecutor::getLayers() const {
             return layers;
         }
 
-        void MultiLayerNeuralNetworkExecutor::setLayers(vector<Layer::AbstractLayer*> layers) {
+        void MultiLayerNeuralNetworkExecutor::setLayers(vector<Layer::AbstractMLPExecutLayer*> layers) {
             this->layers = layers;
         }    
     }

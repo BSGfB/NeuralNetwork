@@ -5,8 +5,10 @@
 
 #include "AbstractBackPropagationErrorLayer.hpp"
 
-#include "ExecutLayer.h"
+#include "AbstractMLPExecutLayer.hpp"
 
-#include "MultiBackPropErrorLayer.hpp"
+#include "MLPExecutLayer.hpp"
+
+#include "BackPropErrorLayer.hpp"
 
 #endif

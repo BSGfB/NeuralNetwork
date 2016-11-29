@@ -27,12 +27,12 @@ namespace NeuralNetwork {
             
             std::vector<float> computeOutput(std::vector<float>) override;
 
-            vector<Layer::AbstractLayer*> getLayers() const;
+            vector<Layer::AbstractMLPExecutLayer*> getLayers() const;
 
-            void setLayers(vector<Layer::AbstractLayer*> layers);
+            void setLayers(vector<Layer::AbstractMLPExecutLayer*> layers);
 
         private:
-            vector<Layer::AbstractLayer*> layers;
+            vector<Layer::AbstractMLPExecutLayer*> layers;
         };
     }
 }

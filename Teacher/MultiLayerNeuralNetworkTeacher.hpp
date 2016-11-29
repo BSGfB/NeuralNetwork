@@ -15,10 +15,10 @@
 #define MULTILAYERNEURALNETWORKTEACHER_HPP
 
 #include "../NeuralNetwork.h"
-#include "../Other/MyLog.h"
 
 #include <vector>
 #include <string>
+#include <ctime>
 
 using std::vector;
 

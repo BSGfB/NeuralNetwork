@@ -14,12 +14,15 @@
 #ifndef ABSTRACTACTIVATIONFUNCTION_HPP
 #define ABSTRACTACTIVATIONFUNCTION_HPP
 
+#include <string>
+
 namespace NeuralNetwork {
     namespace ActivationFunction {       
         class AbstractActivationFunction {
             public:
                 virtual float getValue(float) = 0;
                 virtual float getDerivativeValue(float) = 0;
+                virtual std::string getActivationFunctionName() = 0;
             };
     }
 }

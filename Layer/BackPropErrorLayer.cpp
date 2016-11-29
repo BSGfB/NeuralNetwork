@@ -1,44 +1,44 @@
 #include <stdio.h>
 
-#include "MultiBackPropErrorLayer.hpp"
+#include "BackPropErrorLayer.hpp"
 
 namespace NeuralNetwork {
     namespace Layer {   
 
-        MultiBackPropErrorLayer::MultiBackPropErrorLayer() {
+        BackPropErrorLayer::BackPropErrorLayer() {
         }
 
-        MultiBackPropErrorLayer::MultiBackPropErrorLayer(const MultiBackPropErrorLayer& orig) {
+        BackPropErrorLayer::BackPropErrorLayer(const BackPropErrorLayer& orig) {
         }
 
-        MultiBackPropErrorLayer::~MultiBackPropErrorLayer() {
+        BackPropErrorLayer::~BackPropErrorLayer() {
         }
         
-        ActivationFunction::AbstractActivationFunction* MultiBackPropErrorLayer::getActivationFunction() {
+        ActivationFunction::AbstractActivationFunction* BackPropErrorLayer::getActivationFunction() {
             return activationFunction;
         }
 
-        float MultiBackPropErrorLayer::getSpeedLearning() {
+        float BackPropErrorLayer::getSpeedLearning() {
             return speedLearning;
         }
 
-        vector<float> MultiBackPropErrorLayer::getThresholdVector() {
+        vector<float> BackPropErrorLayer::getThresholdVector() {
             return thresholdVector;
         }
 
-        vector<vector<float> > MultiBackPropErrorLayer::getWeightMatrix() {
+        vector<vector<float> > BackPropErrorLayer::getWeightMatrix() {
             return weightMatrix;
         }
 
-        void MultiBackPropErrorLayer::setActivationFunction(ActivationFunction::AbstractActivationFunction* activationFunction) {
+        void BackPropErrorLayer::setActivationFunction(ActivationFunction::AbstractActivationFunction* activationFunction) {
             this->activationFunction = activationFunction;
         }
 
-        void MultiBackPropErrorLayer::setSpeedLearning(float speedLearning) {
+        void BackPropErrorLayer::setSpeedLearning(float speedLearning) {
             this->speedLearning = speedLearning;
         }
 
-        void MultiBackPropErrorLayer::setWeightMatrix(int inputSize, int outputSize) {
+        void BackPropErrorLayer::setWeightMatrix(int inputSize, int outputSize) {
             this->weightMatrix.resize(outputSize, vector<float>(inputSize, 0.0001f));
             this->thresholdVector.resize(outputSize, 0.f);
 
@@ -47,60 +47,58 @@ namespace NeuralNetwork {
             this->errorVector.resize(outputSize, 0.f);
         }
         
-        
-        
-        void MultiBackPropErrorLayer::adjust() {
+        void BackPropErrorLayer::adjust() {
             for(int i = 0; i < weightMatrix.size(); i++) {
                 float temp = speedLearning * activationFunction->getDerivativeValue(output[i]) * errorVector[i];
                 thresholdVector[i] += temp; 
                 
                 for(int j = 0; j < weightMatrix[i].size(); j++) {
-                    weightMatrix[i][j] -= temp * input[j];
+                    weightMatrix[i][j] -= (temp * this->input[j]);
                 }
             }
         }
 
-        std::vector<float> MultiBackPropErrorLayer::computeBackwardError(std::vector<float> error) {
+        std::vector<float> BackPropErrorLayer::computeBackwardError(std::vector<float> error) {
             this->errorVector = error;
-            vector<float> nextErrorVector(weightMatrix[0].size(), 0.0f);
+            vector<float> nextErrorVector(weightMatrix[0].size(), 0.0f);          
             
             for(int i = 0; i < weightMatrix.size(); i++) {
                 float temp = error[i] * activationFunction->getDerivativeValue(output[i]);
                 
                 for(int j = 0; j < weightMatrix[i].size(); j++) {
-                    nextErrorVector[j] += temp * weightMatrix[i][j];
+                    nextErrorVector[j] += (temp * weightMatrix[i][j]);
                 }
             }
+            
             return nextErrorVector;
         }
 
-        std::vector<float> MultiBackPropErrorLayer::computeOutput(std::vector<float> input) {
-            this->input = input;
-            vector<float> activatedVector(weightMatrix.size());
-                        
+        std::vector<float> BackPropErrorLayer::computeOutput(std::vector<float> input) {
+            this->input = input;            
+            std::vector<float> newOutput(this->output.size());                   
+      
             for(int i = 0; i < weightMatrix.size(); i++) {
                 this->output[i] = 0.0f;
                 
-                for(int j = 0; j < weightMatrix[i].size(); j++) {
+                for(int j = 0; j < weightMatrix[i].size(); j++) 
                     this->output[i] += weightMatrix[i][j] * input[j];
-                }
                 
                 this->output[i] -= thresholdVector[i];
-                activatedVector[i] = this->activationFunction->getValue(this->output[i]);
+                newOutput[i] = this->activationFunction->getValue(this->output[i]);
             }
             
-            return activatedVector;
+            return newOutput;
         }
 
-        unsigned int MultiBackPropErrorLayer::getInputSize() {
+        unsigned int BackPropErrorLayer::getInputSize() {
             return weightMatrix.size() != 0 ? weightMatrix[0].size() : 0;  
         }
 
-        unsigned int MultiBackPropErrorLayer::getOutputSize() {
+        unsigned int BackPropErrorLayer::getOutputSize() {
              return weightMatrix.size();
         }
         
-        void MultiBackPropErrorLayer::randomize(float min, float max) {
+        void BackPropErrorLayer::randomize(float min, float max) {
             srand(time(0));
             
             for(unsigned int i = 0; i < weightMatrix.size(); i++) {
